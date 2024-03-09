@@ -1,0 +1,9 @@
+M Mapping Listlet
+    Source = Folder.Files(FolderLocation),
+    #"Added Custom" = Table.AddColumn(Source, "Pull Workbooks", each Excel.Workbook([Content],true)),
+    #"Expanded Pull Workbooks" = Table.ExpandTableColumn(#"Added Custom", "Pull Workbooks", {"Name", "Data", "Item", "Kind", "Hidden"}, {"Name.1", "Data", "Item", "Kind", "Hidden"}),
+    #"Filtered Rows" = Table.SelectRows(#"Expanded Pull Workbooks", each ([Name.1] <> "Variable Information" and [Name.1] <> "Variable Values")),
+    // Column names command grabs al column headers from resulting table. Table.Combine combines all tables specified in a column. each record must be a table.
+    #"List of Column Headers" = Table.ColumnNames(Table.Combine(#"Filtered Rows"[Data]))
+in
+    #"List of Column Headers"
