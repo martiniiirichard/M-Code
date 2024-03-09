@@ -1,0 +1,11 @@
+let
+    Source = Folder.Files(FolderLocation),
+    #"Table Extarct From Excel in List Form" = Table.AddColumn(Source, "Pull Workbooks", each Excel.Workbook([Content],true)),
+    #"Expanded Pull Workbooks" = Table.ExpandTableColumn(#"Table Extarct From Excel in List Form", "Pull Workbooks", {"Name", "Data", "Item", "Kind", "Hidden"}, {"Name.1", "Data", "Item", "Kind", "Hidden"}),
+    #"Filtered Rows" = Table.SelectRows(#"Expanded Pull Workbooks", each ([Name.1] = "Excel 21 U.S. Auto Claims Study" or [Name.1] = "Excel 23 U.S. Auto Claims Study" or [Name.1] = "Excel File 22 U.S. Auto Claims ")),
+    // This appends raw data tables after the columns are aligned correctly though mapping process.
+    #"Appending Tables" = Table.AddColumn(#"Filtered Rows", "RenameColumns", each Table.RenameColumns([Data],MappingTable,MissingField.Ignore)),
+    // This applies correct names to appended tables.
+    #"Rename Columns" = Table.Combine(#"Appending Tables"[RenameColumns])
+in
+    #"Rename Columns"
