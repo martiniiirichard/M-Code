@@ -1,0 +1,5 @@
+let
+Source=Text.FromBinary(File.Contents("SOME FILE LOCATION AND FILE NAME.txt")),
+EvaluatedExpression = Expression.Evaluate(Source, #shared)
+in
+EvaluatedExpression
