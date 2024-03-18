@@ -1,0 +1,12 @@
+// Adds a new column named "Last Working Day" to the table #"Inserted End of Month"
+Table.AddColumn(
+    #"Inserted End of Month", 
+    "Last Working Day", 
+    each List.Select(
+        // Generates a list of dates starting from the "End of Month" going backwards 2 days (including the "End of Month" itself)
+        List.Dates([End of Month], 3, Duration.From(-1)),
+        // From the generated list, selects the dates that are weekdays (Monday=1 to Friday=5)
+        // The function Date.DayOfWeek(_, 1) < 5 ensures it selects days from Monday to Friday, assuming Monday as the first day of the week (1)
+        each Date.DayOfWeek(_, 1) < 5
+    ){0} // Gets the first date from the filtered list, which represents the last working day
+)
