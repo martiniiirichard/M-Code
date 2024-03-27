@@ -1,0 +1,9 @@
+--for excel
+
+table.transformcoluumns(#"Filtered Rows", {"Content", each Excel.Workbook(_,true)})
+
+table.combine(#"Expanded Content"[Data]
+
+  --for csv
+
+  table.transformcoluumns(#"Filtered Rows", {"Content", each Table.PromoteHeaders(csv.document(_))})
